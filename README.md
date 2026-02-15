@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+A full-stack, real-time workspace designed for teams to manage projects and brainstorm on digital whiteboards simultaneously.
 
-## Getting Started
+## 📝 1. Project Overview
+This platform allows users to create projects, manage multiple whiteboards within them, and share access with teammates using just their username. It features a seamless, real-time drawing experience where changes are synced instantly across all users.
 
-First, run the development server:
+**Technology Stack:**
+* **Framework:** Next.js (App Router)
+* **Database:** PostgreSQL with Prisma ORM
+* **Whiteboard Engine:** TLDraw SDK
+* **Real-time Engine:** Socket.io (WebSockets)
+* **Styling:** Tailwind CSS
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 📊 2. Database Schema
+The project uses a structured relational database to handle users and collaboration permissions.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+* **User:** Manages identity via unique usernames.
+* **Project:** Central entity owned by a user; contains metadata and settings.
+* **ProjectShare:** A junction table handling the many-to-many relationship for shared access.
+* **Whiteboard:** Stores the canvas state (JSON) linked to a specific project.
+* **Relationships:** A Project is linked to one Owner (User) and can have many Members (via ProjectShare).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## ⚙️ 3. Setup Instructions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Prerequisites
+* Node.js (v18+)
+* PostgreSQL instance (Local or Cloud-hosted like Supabase)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Installation & Setup
+1.  **Clone the Repo:**
+    ```bash
+    git clone <your-repo-link>
+    cd <project-folder>
+    ```
+2.  **Install Dependencies:**
+    ```bash
+    npm install
+    ```
+3.  **Environment Setup:**
+    Rename `.env.example` to `.env` and add your database credentials.
+4.  **Database Migration:**
+    ```bash
+    npx prisma generate
+    npx prisma db push
+    ```
+5.  **Run Locally:**
+    ```bash
+    npm run dev
+    ```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🧪 4. Testing Guide
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+To verify all core features, follow this flow:
+
+1.  **Auth Test:** Login as `Satyam`. If the user doesn't exist, the system auto-creates it.
+2.  **Project CRUD:** Create a new project, then create a "New Board" inside it.
+3.  **Auto-Save:** Draw on the canvas, refresh the page, and verify the drawing persists.
+4.  **Sharing Logic:** * Open an Incognito window and login as `Shivam`.
+    * In `Satyam`'s window, click **Share**, enter `shivam`, and confirm.
+    * Verify `shivam` sees the project on his dashboard with a "Shared by Satyam" badge.
+5.  **Real-time Sync:** Open the same board in both windows and draw simultaneously to see live synchronization.
+
+---
+
+## 🚀 5. Deployment
+* **Live URL:** [Paste your Vercel Link here]
+* **Deployment Notes:** * Hosted on **Vercel** with a **Supabase** backend.
+    * Environment variables must be configured in the Vercel Dashboard.
+    * Ensure `NEXT_PUBLIC_SOCKET_URL` matches the production domain.
