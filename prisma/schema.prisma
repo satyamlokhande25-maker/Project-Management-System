@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String         @id @default(uuid())
+  username  String         @unique
+  createdAt DateTime       @default(now())
+  projects  Project[]      @relation("owner_projects")
+  shares    ProjectShare[]
+}
+
+model Project {
+  id          String         @id @default(uuid())
+  name        String
+  description String?
+  ownerId     String
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  owner       User           @relation("owner_projects", fields: [ownerId], references: [id])
+  shares      ProjectShare[]
+  whiteboards Whiteboard[]
+}
+
+model ProjectShare {
+  id        String   @id @default(uuid())
+  projectId String
+  userId    String
+  sharedAt  DateTime @default(now())
+  project   Project  @relation(fields: [projectId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([projectId, userId])
+}
+
+model Whiteboard {
+  id        String   @id @default(uuid())
+  title     String
+  data      Json
+  projectId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  project   Project  @relation(fields: [projectId], references: [id])
+}
