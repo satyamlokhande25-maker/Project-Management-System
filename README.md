@@ -68,7 +68,7 @@ To verify all core features, follow this flow:
 ---
 
 ## 🚀 5. Deployment
-* **Live URL:** [Paste your Vercel Link here]
-* **Deployment Notes:** * Hosted on **Vercel** with a **Supabase** backend.
+* **Live URL:** [project-management-system-production-5c1f.up.railway.app]
+* **Deployment Notes:** * Hosted on **railway** with a **Supabase** backend.
     * Environment variables must be configured in the Vercel Dashboard.
     * Ensure `NEXT_PUBLIC_SOCKET_URL` matches the production domain.
