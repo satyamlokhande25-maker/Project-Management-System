@@ -1,74 +1,111 @@
-A full-stack, real-time workspace designed for teams to manage projects and brainstorm on digital whiteboards simultaneously.
+# Project Management & Real-Time Whiteboard
 
-## 📝 1. Project Overview
-This platform allows users to create projects, manage multiple whiteboards within them, and share access with teammates using just their username. It features a seamless, real-time drawing experience where changes are synced instantly across all users.
+A full-stack collaborative workspace where teams can manage projects, share access, and work together on real-time digital whiteboards.
 
-**Technology Stack:**
-* **Framework:** Next.js (App Router)
-* **Database:** PostgreSQL with Prisma ORM
-* **Whiteboard Engine:** TLDraw SDK
-* **Real-time Engine:** Socket.io (WebSockets)
-* **Styling:** Tailwind CSS
+## Overview
 
-## 📊 2. Database Schema
-The project uses a structured relational database to handle users and collaboration permissions.
+The application combines project management with real-time collaboration. Users can create projects, create multiple whiteboards, share projects with teammates, and synchronize canvas changes across connected clients.
 
-* **User:** Manages identity via unique usernames.
-* **Project:** Central entity owned by a user; contains metadata and settings.
-* **ProjectShare:** A junction table handling the many-to-many relationship for shared access.
-* **Whiteboard:** Stores the canvas state (JSON) linked to a specific project.
-* **Relationships:** A Project is linked to one Owner (User) and can have many Members (via ProjectShare).
+## Key Features
 
+- User identity and login flow
+- Project creation and management
+- Multiple whiteboards per project
+- Project sharing and access control
+- Real-time canvas synchronization
+- Persistent whiteboard state
+- PostgreSQL persistence through Prisma
 
+## Technology Stack
 
----
+| Layer | Technology |
+|---|---|
+| Frontend | Next.js, App Router, Tailwind CSS |
+| Database | PostgreSQL |
+| ORM | Prisma |
+| Whiteboard | TLDraw SDK |
+| Real-time | Socket.io / WebSockets |
 
-## ⚙️ 3. Setup Instructions
+## Architecture
+
+```text
+Next.js Client
+     ↓
+Application Routes / Server Logic
+     ↓
+Prisma ORM → PostgreSQL
+     ↓
+Project / User / Share / Whiteboard Data
+
+Connected Clients
+     ↕
+Socket.io WebSocket Layer
+     ↕
+Real-Time Whiteboard Events
+```
+
+## Data Model
+
+- **User** — application identity
+- **Project** — project owned by a user
+- **ProjectShare** — project access relationship
+- **Whiteboard** — persistent canvas state associated with a project
+
+## Getting Started
 
 ### Prerequisites
-* Node.js (v18+)
-* PostgreSQL instance (Local or Cloud-hosted like Supabase)
 
-### Installation & Setup
-1.  **Clone the Repo:**
-    ```bash
-    git clone <your-repo-link>
-    cd <project-folder>
-    ```
-2.  **Install Dependencies:**
-    ```bash
-    npm install
-    ```
-3.  **Environment Setup:**
-    Rename `.env.example` to `.env` and add your database credentials.
-4.  **Database Migration:**
-    ```bash
-    npx prisma generate
-    npx prisma db push
-    ```
-5.  **Run Locally:**
-    ```bash
-    npm run dev
-    ```
+- Node.js 18+
+- PostgreSQL
 
----
+### Installation
 
-## 🧪 4. Testing Guide
+```bash
+git clone https://github.com/satyamlokhande25-maker/Project-Management-System.git
+cd Project-Management-System
+npm install
+```
 
-To verify all core features, follow this flow:
+Configure the required environment variables, then initialize Prisma:
 
-1.  **Auth Test:** Login as `Satyam`. If the user doesn't exist, the system auto-creates it.
-2.  **Project CRUD:** Create a new project, then create a "New Board" inside it.
-3.  **Auto-Save:** Draw on the canvas, refresh the page, and verify the drawing persists.
-4.  **Sharing Logic:** * Open an Incognito window and login as `Shivam`.
-    * In `Satyam`'s window, click **Share**, enter `shivam`, and confirm.
-    * Verify `shivam` sees the project on his dashboard with a "Shared by Satyam" badge.
-5.  **Real-time Sync:** Open the same board in both windows and draw simultaneously to see live synchronization.
+```bash
+npx prisma generate
+npx prisma db push
+```
 
----
+Start the application:
 
-## 🚀 5. Deployment
-* **Live URL:** [project-management-system-production-5c1f.up.railway.app]
-* **Deployment Notes:** * Hosted on **railway** with a **Supabase** backend.
-    * Environment variables must be configured in the Vercel Dashboard.
-    * Ensure `NEXT_PUBLIC_SOCKET_URL` matches the production domain.
+```bash
+npm run dev
+```
+
+## Validation Checklist
+
+- Sign in with a test user
+- Create a project and whiteboard
+- Refresh and verify persistence
+- Share the project with another test user
+- Open the same board in two sessions
+- Draw in one session and verify real-time synchronization
+
+## Security Considerations
+
+Use environment variables for database credentials and deployment secrets. Apply server-side authorization checks to project and whiteboard operations; do not rely only on client-side visibility.
+
+## Deployment
+
+The original project documentation describes a hosted deployment using Railway/Supabase. For production, configure database, WebSocket, and application environment variables through the deployment platform.
+
+## Future Enhancements
+
+- Role-based project permissions
+- Automated tests
+- Audit logging
+- Presence indicators
+- Version history for whiteboards
+- CI/CD with protected main branch
+
+## Author
+
+**Satyam Lokhande**  
+GitHub: https://github.com/satyamlokhande25-maker
